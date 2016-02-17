@@ -31,6 +31,7 @@
 #include "DynamicTree.h"
 #include "GameObjectModel.h"
 #include "ObjectGuid.h"
+#include "Transaction.h"
 
 #include <bitset>
 #include <list>
@@ -548,9 +549,9 @@ class Map : public GridRefManager<NGridType>
             return itr != _gameObjectRespawnTimesBySpawnId.end() ? itr->second->respawnTime : time_t(0);
         }
 
-        void SaveCreatureRespawnTime(ObjectGuid::LowType spawnId, uint32 entry, time_t respawnTime, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool WriteDB = true);
+        void SaveCreatureRespawnTime(ObjectGuid::LowType spawnId, uint32 entry, time_t respawnTime, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool WriteDB = true, bool replace = false, SQLTransaction respawntrans = nullptr);
         void SaveCreatureRespawnTimeDB(ObjectGuid::LowType spawnId, time_t respawnTime);
-        void SaveGORespawnTime(ObjectGuid::LowType spawnId, uint32 entry, time_t respawnTime, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool WriteDB = true);
+        void SaveGORespawnTime(ObjectGuid::LowType spawnId, uint32 entry, time_t respawnTime, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool WriteDB = true, bool replace = false, SQLTransaction respawntrans = nullptr);
         void SaveGORespawnTimeDB(ObjectGuid::LowType spawnId, time_t respawnTime);
         enum RespawnObjectType
         {
@@ -561,8 +562,8 @@ class Map : public GridRefManager<NGridType>
         void LoadRespawnTimes();
         void DeleteRespawnTimes();
 
-        void RemoveCreatureRespawnTime(ObjectGuid::LowType spawnId = 0, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool respawnCreature = false);
-        void RemoveGORespawnTime(ObjectGuid::LowType spawnId = 0, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool respawnObject = false);
+        void RemoveCreatureRespawnTime(ObjectGuid::LowType spawnId = 0, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool respawnCreature = false, SQLTransaction respawntrans = nullptr);
+        void RemoveGORespawnTime(ObjectGuid::LowType spawnId = 0, uint32 cellAreaZoneId = 0, uint32 gridId = 0, bool respawnObject = false, SQLTransaction respawntrans = nullptr);
 
         uint32 GetPlayersInRangeOfPosition(const Position* pos, uint32 phaseMask, float range, std::list<Player*>& playerList);
 
